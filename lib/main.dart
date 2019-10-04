@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 void main() => runApp(MyApp());
 
@@ -44,6 +45,24 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     });
   }
+
+  void alertDialog(){
+    showDialog(context: context,
+    builder: (BuildContext context){
+      return AlertDialog(
+        title: Text('Allert'),
+        content: Text('This is Alert dialog'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Close'),
+            onPressed: (){
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      );
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -54,7 +73,27 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       drawer: Drawer(
             child : ListView(
-              children: <Widget>[],
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  child: Text('About',style: TextStyle(color: Colors.white),),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                ),
+                ListTile(
+                  title: Text('Seting'),
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>secondScreen()));
+                  },
+                ),
+                ListTile(
+                  title: Text('Alert dialog'),
+                  onTap: (){
+                    alertDialog();
+                  },
+                )
+              ],
             )
 
       ),
@@ -94,5 +133,42 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+}
+
+class secondScreen extends StatelessWidget {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: Text("Setings"),
+      ),
+      body: new Container(
+        child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0)
+            ),
+          color: Colors.purple,
+          elevation: 10,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.settings_applications),
+                title: Text('Change app setings',style: TextStyle(color: Colors.white),),
+                onTap: (){
+                  _scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text('Settings')));
+                },
+              )
+            ],
+          ),
+        ),
+      )
+    );
+
+
+
   }
 }
